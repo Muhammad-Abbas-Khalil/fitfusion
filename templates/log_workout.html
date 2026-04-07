@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex items-center justify-center min-h-screen">
+    <form method="post" class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">Log Workout</h2>
+        <label class="block mb-2 font-semibold">Date</label>
+        <input type="date" name="workout_date" required class="w-full mb-4 px-3 py-2 border rounded-lg">
+
+        <label class="block mb-2 font-semibold">Workout Type</label>
+        <input type="text" name="workout_type" required class="w-full mb-4 px-3 py-2 border rounded-lg">
+
+        <label class="block mb-2 font-semibold">Exercise</label>
+        <input type="text" name="exercise" required class="w-full mb-4 px-3 py-2 border rounded-lg">
+
+        <label class="block mb-2 font-semibold">Sets</label>
+        <input type="number" name="sets" required class="w-full mb-4 px-3 py-2 border rounded-lg">
+
+        <label class="block mb-2 font-semibold">Reps</label>
+        <input type="number" name="reps" required class="w-full mb-4 px-3 py-2 border rounded-lg">
+
+        <label class="block mb-2 font-semibold">Intensity</label>
+        <select name="intensity" required class="w-full mb-4 px-3 py-2 border rounded-lg">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
+        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700">Log Workout</button>
+    </form>
+</div>
+{% endblock %}

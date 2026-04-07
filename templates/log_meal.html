@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex items-center justify-center min-h-screen">
+    <form method="post" class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">Log Meal</h2>
+
+        <label class="block mb-2 font-semibold">Food Item</label>
+        <select name="food_item_id" class="w-full mb-4 px-3 py-2 border rounded-lg">
+            <option value="">-- Select Food --</option>
+            {% for item in food_items %}
+                <option value="{{ item.id }}">{{ item.name }} ({{ item.calories_per_100g }} kcal, {{ item.protein }}g protein)</option>
+            {% endfor %}
+        </select>
+
+        <div class="mb-2 text-center text-gray-500 text-sm">Or add a new food:</div>
+        <input type="text" name="new_food_name" placeholder="Food Name" class="w-full mb-2 px-3 py-2 border rounded-lg">
+        <input type="number" name="new_food_calories" placeholder="Calories per 100g" class="w-full mb-2 px-3 py-2 border rounded-lg">
+        <input type="number" name="new_food_protein" placeholder="Protein per 100g" class="w-full mb-4 px-3 py-2 border rounded-lg">
+
+        <label class="block mb-2 font-semibold">Quantity (e.g. 100g, 1 serving)</label>
+        <input type="text" name="quantity" required class="w-full mb-4 px-3 py-2 border rounded-lg">
+
+        <label class="block mb-2 font-semibold">Meal Type</label>
+        <select name="meal_type" required class="w-full mb-4 px-3 py-2 border rounded-lg">
+            <option value="Breakfast">Breakfast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+            <option value="Snack">Snack</option>
+        </select>
+
+        <label class="block mb-2 font-semibold">Date</label>
+        <input type="date" name="date" required class="w-full mb-4 px-3 py-2 border rounded-lg">
+
+        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700">Log Meal</button>
+    </form>
+</div>
+{% endblock %}

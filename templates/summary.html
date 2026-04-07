@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-green-50 py-10">
+  <div class="w-full max-w-3xl bg-white rounded-3xl shadow-2xl px-10 py-8">
+
+    <h2 class="text-4xl font-extrabold mb-8 text-center text-blue-800 tracking-tight">Daily Summary</h2>
+    <form method="post" class="mb-10 flex flex-col sm:flex-row gap-6 items-center justify-center">
+      <div>
+        <label class="font-bold text-gray-700 block mb-1">Date</label>
+        <input type="date" name="summary_date" required value="{{ summary_date if summary_date else '' }}"
+               class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 transition">
+      </div>
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl shadow transition">
+        View Summary
+      </button>
+    </form>
+
+    {% if summary %}
+    <!-- Modern stats cards row -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
+      <div class="bg-blue-100 rounded-xl p-7 flex flex-col items-center shadow-lg">
+        <div class="text-4xl mb-2">🍽️</div>
+        <div class="text-2xl font-extrabold text-blue-900">{{ summary.calories_in }}</div>
+        <div class="text-blue-700 mt-1 text-lg">Calories In</div>
+      </div>
+      <div class="bg-green-100 rounded-xl p-7 flex flex-col items-center shadow-lg">
+        <div class="text-4xl mb-2">🔥</div>
+        <div class="text-2xl font-extrabold text-green-900">{{ summary.calories_burned }}</div>
+        <div class="text-green-700 mt-1 text-lg">Calories Burned</div>
+      </div>
+      <div class="bg-yellow-100 rounded-xl p-7 flex flex-col items-center shadow-lg">
+        <div class="text-4xl mb-2">⚖️</div>
+        <div class="text-2xl font-extrabold text-yellow-900">{{ summary.net }}</div>
+        <div class="text-yellow-700 mt-1 text-lg">Net Calories</div>
+      </div>
+    </div>
+
+    <div class="mb-10 text-center">
+      {% if summary.net > 0 %}
+        <span class="text-yellow-700 font-semibold text-lg">You’re in a surplus today! Stay active 💪</span>
+      {% elif summary.net < 0 %}
+        <span class="text-green-700 font-semibold text-lg">Great! You’re in a deficit today! Keep it up 🏆</span>
+      {% else %}
+        <span class="text-blue-700 font-semibold text-lg">Your intake matches your output today! Balanced ⚖️</span>
+      {% endif %}
+    </div>
+
+    <div class="mb-8">
+      <div class="mb-1 text-gray-600 font-semibold">Progress toward 2000 kcal:</div>
+      <div class="w-full bg-gray-200 rounded-full h-4">
+        <div class="bg-blue-600 h-4 rounded-full transition-all"
+             style="width: {{ (summary.calories_in / 2000 * 100) if summary.calories_in < 2000 else 100 }}%"></div>
+      </div>
+      <div class="mt-1 text-right text-xs text-gray-500">{{ summary.calories_in }}/2000 kcal</div>
+    </div>
+
+    {% if meals %}
+    <h3 class="text-2xl font-bold mt-8 mb-2 text-blue-800">Meals Today</h3>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-left bg-gray-50 rounded-lg shadow">
+        <thead>
+          <tr class="text-gray-700">
+            <th class="py-2 px-3">Meal</th>
+            <th class="py-2 px-3">Food</th>
+            <th class="py-2 px-3">Qty (g)</th>
+            <th class="py-2 px-3">Calories</th>
+            <th class="py-2 px-3">Protein (g)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for meal in meals %}
+          <tr>
+            <td class="py-2 px-3">{{ meal.meal_type }}</td>
+            <td class="py-2 px-3">{{ meal.food_item.name }}</td>
+            <td class="py-2 px-3">{{ meal.quantity }}</td>
+            <td class="py-2 px-3">
+              {{ (meal.food_item.calories_per_100g or 0) * (meal.quantity | float / 100) | round }}
+            </td>
+            <td class="py-2 px-3">
+              {{ (meal.food_item.protein or 0) * (meal.quantity | float / 100) | round(1) }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+    {% if workouts %}
+    <h3 class="text-2xl font-bold mt-8 mb-2 text-blue-800">Workouts Today</h3>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-left bg-gray-50 rounded-lg shadow">
+        <thead>
+          <tr class="text-gray-700">
+            <th class="py-2 px-3">Type</th>
+            <th class="py-2 px-3">Exercise</th>
+            <th class="py-2 px-3">Sets</th>
+            <th class="py-2 px-3">Reps</th>
+            <th class="py-2 px-3">Intensity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for entry in workouts %}
+          <tr>
+            <td class="py-2 px-3">{{ entry.workout_type }}</td>
+            <td class="py-2 px-3">{{ entry.exercise }}</td>
+            <td class="py-2 px-3">{{ entry.sets }}</td>
+            <td class="py-2 px-3">{{ entry.reps }}</td>
+            <td class="py-2 px-3">{{ entry.intensity }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <div class="mt-8 text-center text-gray-400 italic text-sm">
+      “Success is the sum of small efforts, repeated day in and day out.”<br>— Robert Collier
+    </div>
+  </div>
+</div>
+{% endblock %}
